@@ -1,0 +1,6 @@
+[gd_scene format=2]
+
+[node name="one_way_platform_ctr" type="Node"]
+
+[node name="timer" type="Timer" parent="."]
+
