@@ -1,21 +1,16 @@
 extends KinematicBody2D
 
-var direction
+var direction = Vector2(0,0)
 var velocity = Vector2(0,0)
 var speed = 100
-
-enum {
-	LEFT = -1,
-	RIGHT = 1
-}
-
-
-
-var GRAVATY 	= 80
+onready var body_shape = $BodyShape
+var GRAVATY 	= 0
 var ui_left 	= "ui_left"
 var ui_right 	= "ui_right"
 var ui_up 		= "ui_up"
 var ui_down 	= "ui_down"
+
+var _next_position
 
 var inputArr = {
 	ui_left  : false,
@@ -24,37 +19,53 @@ var inputArr = {
 	ui_down	 : false,
 }
 
+var path_arr = null
+
 func _ready():
-	direction = RIGHT
+	pass
 
-func _input(event):
-	if event.is_action_pressed(ui_right):
-		direction = RIGHT
-		velocity.x = speed * direction
-	if event.is_action_pressed(ui_left):
-		direction = LEFT
-		velocity.x = speed * direction
+func control(delta):
+	pass
+
+func follow_path():
+	if path_arr:
+		var dir_vec = (_next_position - position)
+		if dir_vec.length() < 5:
+			if path_arr.size() == 0:
+				path_arr = null
+				return
+			_next_position = path_arr[0]
+			path_arr.remove(0)
+			_next_position = Vector2(_next_position.x,_next_position.y)
+			return
+		var normal_vec = dir_vec.normalized()
+		velocity = normal_vec * speed
 		
-	if event.is_action_released(ui_right) and direction == RIGHT:
-		if event.is_action_pressed(ui_left):
-			direction = LEFT
-			velocity.x = speed * direction
-		else:
-			velocity.x = 0
-	elif event.is_action_released(ui_left) and direction == LEFT:
-		if event.is_action_pressed(ui_right):
-			direction = RIGHT
-			velocity.x = speed * direction
-		else:
-			velocity.x = 0
 
+func track():
+	_next_position = position
+
+func seek():
+	pass
+
+func get_body_rect():
+	var radius = $body_shape.shape.radius * scale.x
+	var height = $body_shape.height * scale.y
+	var position = Vector2(radius *  2.0 , height / 2.0)
+	var size = Vector2(radius, height)
+	return Rect2(position,size)
+	
 func custom_input_envet(action , pressed):
-#	if pressed and inputArr[action] == pressed:
-#		_print_input_info("按下:" + action)
-#	elif not pressed and inputArr[action] == pressed:
-#		_print_input_info("释放：" + action)
 	inputArr[action] = pressed
 	
+func is_action_pressed(action):
+	return inputArr[action]
+
+func is_action_released(action):
+	return !inputArr[action]
 	
 func _physics_process(delta):
-	move_and_slide(Vector2(velocity.x,GRAVATY),Vector2(0,1))
+	follow_path()
+	control(delta)
+	move_and_slide(velocity,Vector2(0,1))
+	

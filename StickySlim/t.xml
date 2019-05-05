@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:schemaLocation="http://www.chinatax.gov.cn/tirip/dataspec/interfaces.xsd" version="WLFP1.0">
+ <globalInfo>
+  <appId>ZZSDZFP</appId>
+  <interfaceCode>EI.FPKJKCCX.U.EC.INTRA</interfaceCode>
+  <requestCode></requestCode>
+  <requestTime></requestTime>
+  <responseCode></responseCode>
+  <dataExchangeId>190122104422</dataExchangeId>
+  <userName>15000119780514458045</userName>
+  <fjh>1</fjh>
+  <jqbh></jqbh>
+  <passWord></passWord>
+ </globalInfo>
+ <returnStateInfo>
+  <returnCode>8001</returnCode>
+  <returnMessage>5bqT5a2Y5p+l6K+i5aSx6LSl</returnMessage>
+ </returnStateInfo>
+ <Data>
+  <dataDescription>
+   <zipCode>0</zipCode>
+   <encryptCode>0</encryptCode>
+   <codeType></codeType>
+  </dataDescription>
+  <content>PFJFU1BPTlNFX0NPTU1PTl9GUEtDQ1ggY2xhc3M9IlJFU1BPTlNFX0NPTU1PTl9GUEtDQ1giPg0KCTxTWUZQRlM+PC9TWUZQRlM+DQoJPFJFVFVSTkNPREU+ODAwMTwvUkVUVVJOQ09ERT4NCgk8UkVUVVJOTVNHPuW6k+WtmOafpeivouWksei0pTwvUkVUVVJOTVNHPg0KPC9SRVNQT05TRV9DT01NT05fRlBLQ0NYPg==</content>
+ </Data>
+</interface>

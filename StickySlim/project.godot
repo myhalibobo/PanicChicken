@@ -8,20 +8,9 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "Node",
-"class": "InputState",
-"language": "GDScript",
-"path": "res://component/input_state.gd"
-}, {
-"base": "Node",
-"class": "PathFinderFast",
-"language": "GDScript",
-"path": "res://globals/path_finder_fast.gd"
-} ]
+_global_script_classes=[  ]
 _global_script_class_icons={
-"InputState": "",
-"PathFinderFast": ""
+
 }
 
 [application]
@@ -29,6 +18,10 @@ _global_script_class_icons={
 config/name="StickySlim"
 run/main_scene="res://tscn/GameScene.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://globals/Global.gd"
 
 [display]
 
