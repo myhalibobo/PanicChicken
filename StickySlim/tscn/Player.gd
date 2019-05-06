@@ -1,5 +1,10 @@
 extends "res://tscn/actor.gd"
+var body_rect = Vector2(0,0)
 
+func _ready():
+	speed = 200
+	body_rect = get_body_rect()
+	
 func _input(event):
 	if event.is_action_pressed(ui_right):
 		custom_input_envet(ui_right,true)
@@ -9,6 +14,15 @@ func _input(event):
 		custom_input_envet(ui_up,true)
 	if event.is_action_pressed(ui_down):
 		custom_input_envet(ui_down,true)
+		
+	if event.is_action_released(ui_right):
+		custom_input_envet(ui_right,false)
+	if event.is_action_released(ui_left):
+		custom_input_envet(ui_left,false)
+	if event.is_action_released(ui_up):
+		custom_input_envet(ui_up,false)
+	if event.is_action_released(ui_down):
+		custom_input_envet(ui_down,false)
 
 func input_ctr():
 	if is_action_pressed(ui_right):
@@ -16,12 +30,12 @@ func input_ctr():
 	if is_action_pressed(ui_left):
 		velocity.x = -1 * speed
 	
-	if is_action_released(ui_right) and velocity.x == 1:
+	if is_action_released(ui_right) and velocity.x > 0:
 		if is_action_pressed(ui_left):
 			velocity.x = -1 * speed
 		else:
 			velocity.x = 0
-	elif is_action_released(ui_left) and velocity.x == -1:
+	elif is_action_released(ui_left) and velocity.x < 0:
 		if is_action_pressed(ui_right):
 			velocity.x = 1 * speed
 		else:
@@ -32,40 +46,45 @@ func input_ctr():
 	if is_action_pressed(ui_down):
 		velocity.y = 1 * speed
 	
-	if is_action_released(ui_up) and velocity.y == 1:
+	if is_action_released(ui_up) and velocity.y > 0:
 		if is_action_pressed(ui_down):
 			velocity.y = 1 * speed
 		else:
 			velocity.y = 0
-	elif is_action_released(ui_down) and velocity.x == -1:
+	elif is_action_released(ui_down) and velocity.x < 0:
 		if is_action_pressed(ui_up):
-			velocity.x = -1 * speed
+			velocity.y = -1 * speed
 		else:
-			velocity.x = 0
-	
-func check_input_validity():
-	var coord = Global.RoadMap.world_to_map(position)
-	
-	var bit_value = Global.RoadMapBitArray[coord.y][coord.x]
-	if bit_value & 1 == 1 and is_action_pressed(ui_up):
-		#可以上
-		pass
-	if bit_value & 2 == 2 and is_action_pressed(ui_right):
-		#可以右移
-		pass
-	if bit_value & 4 == 4 and is_action_pressed(ui_down):
-		#可以下移
-		pass
-	if bit_value & 8 == 8 and is_action_pressed(ui_left):
-		#可以左移
-		pass
-	pass
+			velocity.y = 0
 
+func is_up_connected(p):
+	var coord = Global.RoadMap.world_to_map(p)
+	var c_id = coord.x + coord.y * Global.RoadMap.get_used_rect().size.x
+	var n_id = coord.x + (coord.y - 1) * Global.RoadMap.get_used_rect().size.x
+	var arr = Global.AStarPath.get_point_connections(c_id)
+	for i in range(arr.size()):
+		if arr[i] == n_id:
+			return true
+	return false
+
+func is_climb_ladder():
+	var is_climb_ladder = false
+	var rect = body_rect
+	var g_position = to_global(rect.position)
+	var down_position = g_position + Vector2(rect.size.x / 2 , rect.size.y)
+	var up_position = g_position + Vector2(rect.size.x / 2 , 0)
+#	print("o" , Global.RoadMap.world_to_map(position) , " up:" , Global.RoadMap.world_to_map(up_position) , " down" , Global.RoadMap.world_to_map(down_position))
+	if is_up_connected(up_position) or is_up_connected(down_position):
+		return true
+	return false
+	
 func _physics_process(delta):
 	input_ctr()
-	move_and_slide(velocity,Vector2(0,1))
+	if is_climb_ladder():
+		move_and_slide(velocity,Vector2(0,1))
+	else:
+		move_and_slide(Vector2(velocity.x,GRAVATY),Vector2(0,1))
 	
-
 func debug_path(path_arr):
 		var debug_label = get_node("/root/GameScene/debug_label")
 		for child in debug_label.get_children():

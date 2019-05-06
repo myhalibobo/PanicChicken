@@ -4,7 +4,7 @@ var direction = Vector2(0,0)
 var velocity = Vector2(0,0)
 var speed = 100
 onready var body_shape = $BodyShape
-var GRAVATY 	= 0
+var GRAVATY 	= 80
 var ui_left 	= "ui_left"
 var ui_right 	= "ui_right"
 var ui_up 		= "ui_up"
@@ -22,6 +22,7 @@ var inputArr = {
 var path_arr = null
 
 func _ready():
+	print(name + " actor")
 	pass
 
 func control(delta):
@@ -49,10 +50,10 @@ func seek():
 	pass
 
 func get_body_rect():
-	var radius = $body_shape.shape.radius * scale.x
-	var height = $body_shape.height * scale.y
-	var position = Vector2(radius *  2.0 , height / 2.0)
-	var size = Vector2(radius, height)
+	var radius = body_shape.shape.radius
+	var height = body_shape.shape.height
+	var position = body_shape.position - Vector2(radius , height)
+	var size = Vector2(radius ,height) * scale * 2
 	return Rect2(position,size)
 	
 func custom_input_envet(action , pressed):
@@ -64,8 +65,8 @@ func is_action_pressed(action):
 func is_action_released(action):
 	return !inputArr[action]
 	
-func _physics_process(delta):
-	follow_path()
-	control(delta)
-	move_and_slide(velocity,Vector2(0,1))
+#func _physics_process(delta):
+#	follow_path()
+#	control(delta)
+#	move_and_slide(velocity,Vector2(0,1))
 	
