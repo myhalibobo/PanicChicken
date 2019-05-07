@@ -43,9 +43,9 @@ func shoot():
 		cur_bomb = bomb
 	else:
 		if cur_direction == LEFT:
-			cur_bomb.shoot(-1)
-		if cur_direction == RIGHT:
 			cur_bomb.shoot(1)
+		if cur_direction == RIGHT:
+			cur_bomb.shoot(-1)
 	
 	
 func input_ctr():
