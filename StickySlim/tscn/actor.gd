@@ -80,10 +80,8 @@ func is_climb_ladder():
 
 func update_direction():
 	if velocity.x < 0:
-		cur_direction = RIGHT
 		$Sprite.flip_h = true
 	if velocity.x > 0:
-		cur_direction = LEFT
 		$Sprite.flip_h = false
 		
 func get_body_rect():

@@ -9,7 +9,7 @@ radius = 12.309
 height = 11.6595
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 209.7
+radius = 132.988
 
 [sub_resource type="DynamicFont" id=3]
 size = 11
@@ -30,7 +30,6 @@ position = Vector2( 0, -13.0627 )
 shape = SubResource( 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
-visible = false
 collision_layer = 0
 collision_mask = 2
 

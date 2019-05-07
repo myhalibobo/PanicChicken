@@ -47,7 +47,6 @@ func shoot():
 		if cur_direction == RIGHT:
 			cur_bomb.shoot(-1)
 	
-	
 func input_ctr():
 	if is_action_pressed(ui_right):
 		velocity.x = 1 * speed
@@ -80,6 +79,14 @@ func input_ctr():
 		else:
 			velocity.y = 0
 
+func update_direction():
+	if velocity.x < 0:
+		cur_direction = RIGHT
+		$Sprite.flip_h = true
+	if velocity.x > 0:
+		cur_direction = LEFT
+		$Sprite.flip_h = false
+		
 func _physics_process(delta):
 	input_ctr()
 	update_direction()
