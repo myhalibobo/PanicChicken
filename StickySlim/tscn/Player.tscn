@@ -1,39 +1,25 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://tscn/Player.gd" type="Script" id=1]
-[ext_resource path="res://assets/player/adventurer-idle-00.png" type="Texture" id=2]
-[ext_resource path="res://assets/player/adventurer-idle-01.png" type="Texture" id=3]
-[ext_resource path="res://assets/player/adventurer-idle-03.png" type="Texture" id=4]
-[ext_resource path="res://assets/player/adventurer-idle-02.png" type="Texture" id=5]
+[ext_resource path="res://tscn/bomb.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/BombChickenPins.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 6.83
-height = 15.184
-
-[sub_resource type="SpriteFrames" id=2]
-animations = [ {
-"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ) ],
-"loop": true,
-"name": "idle",
-"speed": 5.0
-}, {
-"frames": [  ],
-"loop": true,
-"name": "run",
-"speed": 5.0
-} ]
+radius = 20.0
+height = 10.0
 
 [node name="Player" type="KinematicBody2D"]
-scale = Vector2( 3, 3 )
+collision_layer = 2
 script = ExtResource( 1 )
+Bomb = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -6 )
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 736, 420, 632, 612 )
 
 [node name="BodyShape" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -7.58 )
 shape = SubResource( 1 )
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -10 )
-frames = SubResource( 2 )
-animation = "idle"
-playing = true
 
