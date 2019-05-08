@@ -1,12 +1,15 @@
 extends "res://tscn/actor.gd"
 
 export (PackedScene) var Bomb
+
 signal product_gold
 signal gold_num_changed
-var cur_bomb
+
+var cur_bomb111
 var own_gold_num = 0
 var is_dead = false
 var is_bomb_cd = false
+
 func _ready():
 	speed = 200
 	GRAVATY = 150
@@ -39,23 +42,12 @@ func _input(event):
 		custom_input_envet(ui_attack,false)
 		
 func shoot():
-	if not is_instance_valid(cur_bomb) or not cur_bomb:
-#		if is_bomb_cd:
-#			return
-#		is_bomb_cd = true
-		var bombNode = get_node("/root/GameScene/BombNode")
+	var bombNode = get_node("/root/GameScene/BombNode")
+	if bombNode.get_child_count() == 0:
 		var bomb = Bomb.instance()
 		bomb.position = position
 		bombNode.add_child(bomb)
-		cur_bomb = bomb
-#		$Timer_bomb_CD.wait_time = 5
-#		$Timer_bomb_CD.start()
-	else:
-		if cur_direction == LEFT:
- 			cur_bomb.shoot(1)
-		if cur_direction == RIGHT:
-			cur_bomb.shoot(-1)
-	
+
 func input_ctr():
 	if is_action_pressed(ui_right):
 		velocity.x = 1 * speed

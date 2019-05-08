@@ -103,7 +103,7 @@ func _on_Timer_timeout():
 		
 	path_arr.remove(0)
 	track()
-	$Label.hide() 
+	$Label.hide()
 
 func _physics_process(delta):
 	if not track_body or path_arr == null:
@@ -135,4 +135,3 @@ func _on_Area2D_body_exited(body):
 
 func _on_Timer_dizzy_timeout():
 	is_dizzy = false
-	pass
