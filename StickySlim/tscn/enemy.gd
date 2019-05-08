@@ -3,7 +3,7 @@ extends "res://tscn/actor.gd"
 
 var track_body
 onready var timer = $Timer
-
+var is_dizzy = false
 var debug_label = 0
 func _ready():
 	debug_label = Label.new()
@@ -64,8 +64,8 @@ func wander():
 		select_arr.shuffle()
 		target = select_arr[0]
 		
-	if target != cur_direction:
-		debug_label.text = str(target)
+#	if target != cur_direction:
+#		debug_label.text = str(target)
 		
 	if target == up_id:
 		cur_direction = UP
@@ -95,25 +95,30 @@ func _on_Timer_timeout():
 	var rect = Global.RoadMap.get_used_rect()
 	var my_id = my_coord.x + my_coord.y * rect.size.x
 	var tar_id = tar_coord.x + tar_coord.y * rect.size.x
-	path_arr = Global.AStarPath.get_point_path(my_id,tar_id)
-	if path_arr.size() == 0:
-		wander()
+	if Global.AStarPath.has_point(my_id) and Global.AStarPath.has_point(tar_id):
+		path_arr = Global.AStarPath.get_point_path(my_id,tar_id)
+	else:
+		path_arr == null
 		return
+		
 	path_arr.remove(0)
 	track()
 	$Label.hide() 
 
 func _physics_process(delta):
-	if not track_body:
+	if not track_body or path_arr == null:
 		wander()
+		
 	follow_path()
-
 	update_direction()
+	if is_dizzy:
+		velocity.x = 0
 	move_and_slide(velocity,Vector2(0,-1))
 
-#分裂成两个小的
 func take_damage():
-	pass
+	$Timer_dizzy.wait_time = 1.5
+	$Timer_dizzy.start()
+	is_dizzy = true
 
 func _on_Area2D_body_entered(body):
 	track_body = body
@@ -127,3 +132,7 @@ func _on_Area2D_body_entered(body):
 func _on_Area2D_body_exited(body):
 	track_body = null
 	timer.stop()
+
+func _on_Timer_dizzy_timeout():
+	is_dizzy = false
+	pass

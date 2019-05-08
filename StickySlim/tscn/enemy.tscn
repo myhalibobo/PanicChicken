@@ -49,6 +49,9 @@ text = "假装在思考..."
 align = 1
 valign = 1
 
+[node name="Timer_dizzy" type="Timer" parent="."]
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="Timer_dizzy" to="." method="_on_Timer_dizzy_timeout"]

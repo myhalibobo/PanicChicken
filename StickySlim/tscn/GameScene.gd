@@ -1,24 +1,16 @@
 extends Node2D
 onready var tile_map = $TileMap
 onready var road_map = $road
-
+var Gold = preload("res://tscn/Gold.tscn")
+var random_ids = []
 
 func _ready():
+	randomize()
 	var path_call = []
 	var star = AStar.new()
 	var rect = road_map.get_used_rect()
 	var cells = road_map.get_used_cells()
 	
-#	cells = [
-#		Vector2(17, 23),
-#		Vector2(17, 24),
-#		Vector2(17, 25),
-#		Vector2(17, 26),
-#		Vector2(17, 23),
-#		Vector2(18, 23),
-#		Vector2(16, 22),
-#		Vector2(18, 22)
-#		]
 	for cell in cells:
 		var p = road_map.map_to_world(Vector2(cell.x,cell.y)) + Vector2(32,32)
 		star.add_point(cell.x + cell.y * rect.size.x , Vector3(p.x , p.y , 0))
@@ -54,7 +46,8 @@ func _ready():
 		bit_value = (bit_value*rot)%15
 
 		var cur_id   = cell.x + cell.y     * rect.size.x
-#		l.text = str(cur_id)
+#		l.text = str(bit_value)
+
 		var up_id    = cell.x + (cell.y-1) * rect.size.x
 		var down_id  = cell.x + (cell.y+1) * rect.size.x
 		var left_id  = cur_id - 1
@@ -67,8 +60,19 @@ func _ready():
 			star.connect_points(cur_id , down_id , false)
 		if bit_value & 8 == 8:
 			star.connect_points(cur_id , left_id , false)
-		
+			
+		if bit_value == 10:
+			random_ids.append(cur_id)
+			
 	Global.AStarPath = star
 	Global.CurTMap = tile_map
 	Global.RoadMap = road_map
 
+func product_romdom_gold():
+	var gold = Gold.instance()
+	var items = get_node("Items")
+	items.add_child(gold)
+	random_ids.shuffle()
+	var id = random_ids[0]
+	var p = Global.AStarPath.get_point_position(id)
+	gold.position = Vector2(p.x , p.y)

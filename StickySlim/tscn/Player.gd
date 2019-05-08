@@ -1,13 +1,18 @@
 extends "res://tscn/actor.gd"
 
 export (PackedScene) var Bomb
-
+signal product_gold
+signal gold_num_changed
 var cur_bomb
-
+var own_gold_num = 0
+var is_dead = false
+var is_bomb_cd = false
 func _ready():
 	speed = 200
 	GRAVATY = 150
 	cur_direction = RIGHT
+	yield(get_tree(),"idle_frame")
+	emit_signal("product_gold")
 	
 func _input(event):
 	if event.is_action_pressed(ui_right):
@@ -35,15 +40,19 @@ func _input(event):
 		
 func shoot():
 	if not is_instance_valid(cur_bomb) or not cur_bomb:
-		print(is_instance_valid(cur_bomb))
+#		if is_bomb_cd:
+#			return
+#		is_bomb_cd = true
 		var bombNode = get_node("/root/GameScene/BombNode")
 		var bomb = Bomb.instance()
 		bomb.position = position
 		bombNode.add_child(bomb)
 		cur_bomb = bomb
+#		$Timer_bomb_CD.wait_time = 5
+#		$Timer_bomb_CD.start()
 	else:
 		if cur_direction == LEFT:
-			cur_bomb.shoot(1)
+ 			cur_bomb.shoot(1)
 		if cur_direction == RIGHT:
 			cur_bomb.shoot(-1)
 	
@@ -86,7 +95,12 @@ func update_direction():
 	if velocity.x > 0:
 		cur_direction = LEFT
 		$Sprite.flip_h = false
-		
+
+func add_gold():
+	own_gold_num += 1
+	emit_signal("product_gold")
+	emit_signal("gold_num_changed", own_gold_num)
+
 func _physics_process(delta):
 	input_ctr()
 	update_direction()
@@ -107,3 +121,16 @@ func debug_path(path_arr):
 			l.modulate = Color(0,1,0)
 			debug_label.add_child(l)
 		print(path_arr)
+
+func _on_Area2D_body_entered(body):
+	var parent = get_node("/root/GameScene")
+	var die_tscn = preload("res://ui/die.tscn").instance()
+	parent.add_child(die_tscn)
+	
+	$Area2D.set_deferred("monitoring",false)
+	$Area2D.set_deferred("monitorable",false)
+	set_physics_process(false)
+	set_process_input(false)
+	
+func _on_Timer_bomb_CD_timeout():
+	pass # Replace with function body.

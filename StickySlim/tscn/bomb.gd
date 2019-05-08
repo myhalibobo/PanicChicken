@@ -8,7 +8,7 @@ func _ready():
 	pass
 
 func _physics_process(delta):
-	move_and_slide(Vector2(velocity.x * speed , GRAVATY),Vector2(0,-1))
+	move_and_slide(Vector2(velocity.x * speed , 0),Vector2(0,-1))
 
 func shoot(direction):
 	if is_going:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://tscn/Player.gd" type="Script" id=1]
 [ext_resource path="res://tscn/bomb.tscn" type="PackedScene" id=2]
@@ -7,6 +7,10 @@
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 20.0
 height = 10.0
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 24.0
+height = 3.3
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -23,3 +27,14 @@ region_rect = Rect2( 736, 420, 632, 612 )
 [node name="BodyShape" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 2 )
+
+[node name="Timer_bomb_CD" type="Timer" parent="."]
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="timeout" from="Timer_bomb_CD" to="." method="_on_Timer_bomb_CD_timeout"]
