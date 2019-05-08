@@ -1,8 +1,10 @@
 extends Node2D
 
 var draw_body
+
 func _ready():
-	draw_body = get_parent().get_node("BombNode/enemy")
+	pass
+#	draw_body = get_parent().get_node("BombNode/enemy")
 
 #func _process(delta):
 #	update()

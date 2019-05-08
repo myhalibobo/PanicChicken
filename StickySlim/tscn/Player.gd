@@ -4,11 +4,12 @@ export (PackedScene) var Bomb
 
 signal product_gold
 signal gold_num_changed
+signal update_process_bar
 
-var cur_bomb111
 var own_gold_num = 0
 var is_dead = false
 var is_bomb_cd = false
+var bomb_cd_time = 5
 
 func _ready():
 	speed = 200
@@ -43,11 +44,16 @@ func _input(event):
 		
 func shoot():
 	var bombNode = get_node("/root/GameScene/BombNode")
-	if bombNode.get_child_count() == 0:
+	if not is_bomb_cd:
 		var bomb = Bomb.instance()
 		bomb.position = position
 		bombNode.add_child(bomb)
+		is_bomb_cd = true
 
+		$Timer_bomb_CD.wait_time = bomb_cd_time
+		$Timer_bomb_CD.start()
+		emit_signal("update_process_bar",bomb_cd_time)
+	
 func input_ctr():
 	if is_action_pressed(ui_right):
 		velocity.x = 1 * speed
@@ -125,4 +131,4 @@ func _on_Area2D_body_entered(body):
 	set_process_input(false)
 	
 func _on_Timer_bomb_CD_timeout():
-	pass # Replace with function body.
+	is_bomb_cd = false

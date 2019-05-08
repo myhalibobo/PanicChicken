@@ -5,6 +5,8 @@ var track_body
 onready var timer = $Timer
 var is_dizzy = false
 var debug_label = 0
+var escape_dir 
+
 func _ready():
 	debug_label = Label.new()
 	add_child(debug_label)
@@ -55,7 +57,10 @@ func wander():
 			select_arr.append(down_id)
 		if cur_direction == DOWN and array_has(cur_connects,up_id):
 			select_arr.append(up_id)
-	
+			
+	if select_arr.size() == 0:
+		return
+		
 	var target
 	if cur_direction == null:
 		cur_connects.shuffle()
@@ -106,23 +111,30 @@ func _on_Timer_timeout():
 	$Label.hide()
 
 func _physics_process(delta):
+
 	if not track_body or path_arr == null:
 		wander()
-		
-	follow_path()
-	update_direction()
 	if is_dizzy:
-		velocity.x = 0
+		if is_climb_ladder():
+			velocity.y = speed
+		else:
+			velocity.x = speed * escape_dir
+		path_arr = null
+	
+	follow_path()
+	
+	update_direction()
+	
 	move_and_slide(velocity,Vector2(0,-1))
 
-func take_damage():
+func take_damage(_escape_dir):
+	escape_dir = _escape_dir
 	$Timer_dizzy.wait_time = 1.5
 	$Timer_dizzy.start()
 	is_dizzy = true
 
 func _on_Area2D_body_entered(body):
 	track_body = body
-	
 	timer.wait_time = 2
 	timer.start()
 	_on_Timer_timeout()

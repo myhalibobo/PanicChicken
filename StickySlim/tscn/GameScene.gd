@@ -76,3 +76,6 @@ func product_romdom_gold():
 	var id = random_ids[0]
 	var p = Global.AStarPath.get_point_position(id)
 	gold.position = Vector2(p.x , p.y)
+
+func update_progress_bar():
+	pass # Replace with function body.

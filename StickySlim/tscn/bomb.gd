@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
 var velocity = Vector2(0,0)
-var GRAVATY  = 100
-var speed    = 250
+var GRAVATY  = 150
+var speed    = 300
 
 var note_player
 
@@ -10,7 +10,13 @@ func _ready():
 	pass
 
 func _physics_process(delta):
-	move_and_slide(Vector2(velocity.x * speed , 0),Vector2(0,-1))
+	for i in range(get_slide_count()):
+		var collision = get_slide_collision(i)
+		if collision.collider.name == "TileMap":
+			if collision.normal == Vector2(1,0) or collision.normal == Vector2(-1,0):
+				velocity.x = 0
+	
+	move_and_slide(Vector2(velocity.x * speed , GRAVATY),Vector2(0,-1))
 
 func _input(event):
 	if event.is_action_pressed("ui_attack") and note_player:
@@ -28,7 +34,10 @@ func _on_Area2D_body_entered(body):
 		note_player = body
 		return
 	if body.has_method("take_damage"):
-		body.take_damage()
+		if position.x > body.position.x:
+			body.take_damage(-1)
+		else:
+			body.take_damage(1)
 	queue_free()
 
 func _on_Timer_timeout():

@@ -101,34 +101,28 @@ zoom = Vector2( 1.2, 1 )
 [node name="debug_label" type="Node2D" parent="."]
 
 [node name="Player" parent="." instance=ExtResource( 9 )]
-position = Vector2( 1177.42, 933.078 )
+position = Vector2( 1704.64, 1186.92 )
 
 [node name="MonsterNode" type="Node2D" parent="."]
 editor/display_folded = true
 
 [node name="enemy" parent="MonsterNode" instance=ExtResource( 10 )]
-position = Vector2( 2148.37, 1707.7 )
-
-[node name="enemy2" parent="MonsterNode" instance=ExtResource( 10 )]
-position = Vector2( 632.569, 1441.6 )
-
-[node name="enemy3" parent="MonsterNode" instance=ExtResource( 10 )]
-position = Vector2( 1737.3, 1459.01 )
-
-[node name="enemy5" parent="MonsterNode" instance=ExtResource( 10 )]
-position = Vector2( 1958.89, 939.983 )
+position = Vector2( 2059.11, 1704.91 )
 
 [node name="enemy6" parent="MonsterNode" instance=ExtResource( 10 )]
-position = Vector2( 1693.87, 1175.39 )
+position = Vector2( 1961.47, 1451.07 )
 
-[node name="enemy7" parent="MonsterNode" instance=ExtResource( 10 )]
-position = Vector2( 496.909, 1685.68 )
+[node name="enemy2" parent="MonsterNode" instance=ExtResource( 10 )]
+position = Vector2( 597.403, 1665.86 )
 
-[node name="enemy8" parent="MonsterNode" instance=ExtResource( 10 )]
-position = Vector2( 692.037, 1190.03 )
+[node name="enemy3" parent="MonsterNode" instance=ExtResource( 10 )]
+position = Vector2( 371.453, 1451.07 )
 
 [node name="enemy4" parent="MonsterNode" instance=ExtResource( 10 )]
-position = Vector2( 380.871, 925.638 )
+position = Vector2( 388.19, 929.427 )
+
+[node name="enemy5" parent="MonsterNode" instance=ExtResource( 10 )]
+position = Vector2( 1902.89, 932.217 )
 
 [node name="BombNode" type="Node2D" parent="."]
 
@@ -141,3 +135,4 @@ script = ExtResource( 11 )
 
 [connection signal="gold_num_changed" from="Player" to="ui" method="update_gold_num"]
 [connection signal="product_gold" from="Player" to="." method="product_romdom_gold"]
+[connection signal="update_process_bar" from="Player" to="ui" method="update_progress_bar"]
